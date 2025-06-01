@@ -1,0 +1,15 @@
+[project]
+name = "stablecpp-api"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "ssghost", email = "ssprof0@gmail.com"},
+]
+dependencies = ["fastapi>=0.115.12", "uvicorn>=0.34.3", "Pillow>=11.2.1", "stable-diffusion-cpp-python>=0.2.7"]
+requires-python = "==3.13.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
