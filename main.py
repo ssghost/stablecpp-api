@@ -89,8 +89,3 @@ async def generate_text_to_image(request: TextToImageRequest):
 async def read_root():
     return {"message": "Stablecpp API is running. Use /docs for API reference."}
 
-# To run this:
-# 1. Ensure you have activated your virtual environment: `source sd_api_env/bin/activate`
-# 2. Run from your terminal in the directory containing main.py:
-#    `uvicorn main:app --host 0.0.0.0 --port 8000 --reload`
-#    Remove `--reload` for production.
