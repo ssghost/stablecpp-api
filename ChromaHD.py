@@ -8,9 +8,9 @@ import os
 from stable_diffusion_cpp import StableDiffusion
 
 app = FastAPI(
-    title="Web API for stable-diffusion.cpp",
-    description="Generate images using a local stable-diffusion.cpp backend.",
-    version="1.0.0"
+    title="Web API for Flux (via stable-diffusion.cpp)",
+    description="Generate images using a local Flux/Chroma backend.",
+    version="1.0.1"
 )
 
 MODEL_PATH = os.path.join("/Volumes/TOSHIBA EXT/GGUF", "Chroma1-HD-Q4_K_S.gguf")
@@ -25,37 +25,36 @@ async def startup_event():
         raise FileNotFoundError(f"Model file not found: {MODEL_PATH}")
 
     try:
-        print(f"Loading Stablecpp model from {MODEL_PATH}...")
+        print(f"Loading Flux model from {MODEL_PATH}...")
         sd_pipeline = StableDiffusion(model_path=MODEL_PATH)
         print("Model loaded successfully!")
     except Exception as e:
         print(f"Failed to load model: {e}")
-        raise RuntimeError(f"Failed to load Stablecpp model: {e}")
+        raise RuntimeError(f"Failed to load Flux model: {e}")
 
 @app.on_event("shutdown")
 async def shutdown_event():
     global sd_pipeline
     sd_pipeline = None
-    print("Stablecpp model unloaded.")
+    print("Model unloaded.")
 
 
 class TextToImageRequest(BaseModel):
     prompt: str
-    negative_prompt: Optional[str] = ""
-    width: int = 512
-    height: int = 512
-    steps: int = 20
-    cfg_scale: float = 7.0
+    negative_prompt: Optional[str] = ""  
+    width: int = 1024   
+    height: int = 1024  
+    steps: int = 20     
+    cfg_scale: float = 1.0  
     seed: int = -1 
 
 class ImageToImageRequest(BaseModel):
     pass
 
-
 @app.post("/generate/text-to-image")
 async def generate_text_to_image(request: TextToImageRequest):
     if sd_pipeline is None:
-        raise HTTPException(status_code=503, detail="Stablecpp model not loaded.")
+        raise HTTPException(status_code=503, detail="Model not loaded.")
 
     print(f"Generating image for prompt: '{request.prompt}'")
     try:
@@ -67,6 +66,7 @@ async def generate_text_to_image(request: TextToImageRequest):
             sample_steps=request.steps,
             cfg_scale=request.cfg_scale,
             seed=request.seed,
+            sample_method="euler", 
             progress_callback=lambda step, steps, time: print(f"Step {step}/{steps}") 
         )
 
@@ -87,5 +87,4 @@ async def generate_text_to_image(request: TextToImageRequest):
 
 @app.get("/")
 async def read_root():
-    return {"message": "Stablecpp API is running. Use /docs for API reference."}
-
+    return {"message": "Flux API is running."}
