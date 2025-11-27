@@ -84,7 +84,6 @@ async def generate_text_to_image(request: TextToImageRequest):
         print(f"Error during image generation: {e}")
         raise HTTPException(status_code=500, detail=f"Error generating image: {e}")
 
-
 @app.get("/")
 async def read_root():
     return {"message": "Flux API is running."}
