@@ -13,7 +13,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-MODEL_PATH = os.path.join("/Volumes/TOSHIBA EXT/GGUF", "chroma-unlocked-v20-Q4_K_S.gguf")
+MODEL_PATH = os.path.join("/Volumes/WDEXT/GGUF", "chroma-unlocked-v20-Q4_K_S.gguf")
 
 sd_pipeline: Optional[StableDiffusion] = None
 
